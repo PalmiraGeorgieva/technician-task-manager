@@ -4,9 +4,9 @@ import logo from '../../assets/images/logoTtm.png';
 import "./Header.css";
 
 function Header() {
-    const { isAuthenticated, setIsAuthenticated } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
     const handleLogout = () => {
-        setIsAuthenticated(false);
+       logout();
     };
 
     return (

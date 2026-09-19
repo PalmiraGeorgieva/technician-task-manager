@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import "./Login.css";
 
 function Login() {
-    const { setIsAuthenticated } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         email: "",
@@ -45,7 +45,7 @@ function Login() {
             email: "",
             password: "",
         });
-        setIsAuthenticated(true);
+        login();
 
         navigate("/dashboard");
         console.log("Login data", formData);
