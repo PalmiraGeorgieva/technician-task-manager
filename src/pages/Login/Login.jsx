@@ -41,14 +41,29 @@ function Login() {
             return;
         }
 
+        const savedUser = JSON.parse(localStorage.getItem("user"));
+
+        if (!savedUser) {
+            alert("User not found. Please register first.");
+            return;
+        }
+        if(
+            formData.email !== savedUser.email || 
+            formData.password !== savedUser.password
+        ) {
+            alert("Invalid email or password.")
+            return;
+        }
+
+        login();
+
         setFormData({
             email: "",
             password: "",
         });
-        login();
+       
 
         navigate("/dashboard");
-        console.log("Login data", formData);
     }
 
     return (

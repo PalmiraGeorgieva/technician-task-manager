@@ -36,3 +36,51 @@
 .main-nav a:active {
     color: #38bdf8;
 }
+
+@media (max-width: 768px) {
+    .site-header {
+        flex-direction: column;
+        padding: 12px 16px;
+        gap: 12px;
+    }
+    .logo-img {
+        width: 75px;
+    }
+
+    .main-nav {
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+    }
+
+    .main-nav a {
+        padding-top: 0;
+        font-size: 14px;
+    }
+    .main-nav button {
+        font-size: 14px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .site-header {
+        padding: 10px;
+    }
+
+    .logo-img {
+        width: 65px;
+    }
+
+    .main-nav {
+        gap: 8px 10px;
+    }
+
+    .main-nav a,
+    .main-nav button {
+        font-size: 13px;
+    }
+    
+}
