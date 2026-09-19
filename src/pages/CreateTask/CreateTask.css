@@ -1,0 +1,80 @@
+.create-task {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.create-task h1 {
+    margin-bottom: 24px;
+    font-size: 32px;
+    text-align: center;
+    color: #f06423;
+}
+
+.create-task form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    padding: 28px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.create-task form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.create-task label {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    color: #374151;
+}
+
+.create-task input,
+.create-task select,
+.create-task textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #1f2937;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+.create-task textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.create-task input:focus,
+.create-task select:focus,
+.create-task textarea:focus {
+    outline: none;
+    border-color: #f06423;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.create-task button {
+    margin-top: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f06423;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.create-task button:hover {
+    background-color: #d9531e;
+}

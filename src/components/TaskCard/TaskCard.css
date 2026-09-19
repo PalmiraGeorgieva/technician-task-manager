@@ -1,0 +1,60 @@
+.task-card {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.task-card h3 {
+    margin-top: 0;
+}
+
+.task-status, .task-priority {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background-color: #e2e8f0;
+    font-size: 14px;
+}
+
+.task-date {
+    color: #64748b;
+    font-size: 14px;
+}
+.task-priority.priority-high {
+    font-weight: bold;
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.task-priority.priority-medium {
+    font-weight: bold;
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.task-priority.priority-low {
+    font-weight: bold;
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.task-status.status-completed {
+    font-weight: bold;
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.task-status.status-in-progress {
+    font-weight: bold;
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.task-status.status-pending {
+    font-weight: bold;
+    background-color: #fef3c7;
+    color: #92400e;
+}
