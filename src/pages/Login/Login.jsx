@@ -54,6 +54,15 @@ function Login() {
             alert("Invalid email or password.")
             return;
         }
+        if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            alert("Please enter a valid email address!");
+            return;
+        }
+
+        if (formData.password.length < 6) {
+            alert("Password must be at least 6 characters long!");
+            return;
+        }
 
         login();
 

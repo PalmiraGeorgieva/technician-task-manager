@@ -25,36 +25,50 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const username = formData.username.trim();
+        const email = formData.email.trim();
 
-        if(formData.password !== formData.confirmPassword) {
-            alert("Password do not match");
-            return;
-        }
-        if(!formData.username) {
-            alert("Please enter your username!");
+        if (!username) {
+            alert("Please enter your username!")
             return;
         }
 
-        if(!formData.email) {
+        if(username.length < 3) {
+            alert("Username must be at least 3 characters long!");
+            return;
+        }
+        if(!email) {
             alert("Please enter your email!");
             return;
         }
 
-        if (!formData.email.includes("@")) {
-            alert("Please enter a valid email!");
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if(!emailPattern.test(email)) {
+            alert("Please enter a valid email address!");
             return;
         }
 
-        if(!formData.password) {
-            alert('Please enter your password!');
-            return;
-        }
-        if (!formData.confirmPassword) {
-            alert('Please confirm your password!');
+        if (!formData.password) {
+            alert("Please enter your password!");
             return;
         }
 
-        localStorage.setItem("user", JSON.stringify(formData));
+        if(formData.password.length < 6) {
+            alert("Password must be at least 6 characters long!");
+            return;
+        }
+
+        if(!formData.confirmPassword) {
+            alert("Please confirm your password!");
+            return;
+        }
+
+        localStorage.setItem("user", JSON.stringify({
+            username,
+            email,
+            password: formData.password,
+        }));
 
 
         setFormData({
