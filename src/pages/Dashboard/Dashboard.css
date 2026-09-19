@@ -32,3 +32,50 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
 }
+
+@media (max-width: 900px) {
+    .dashboard {
+        padding: 25px 30px;
+    }
+
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .recent-tasks-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+}
+
+@media (max-width: 600px) {
+    .dashboard {
+        padding: 20px 16px;
+    }
+
+    .dashboard h1 {
+        font-size: 1.8px;
+        margin-bottom: 20px;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .recent-tasks {
+        margin-top: 28px;
+    }
+
+    .recent-tasks h2 {
+        font-size: 1.4rem;
+        margin-bottom: 16px;
+    }
+
+    .recent-tasks-list {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
