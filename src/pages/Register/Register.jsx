@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import "./Register.css";
 
 
@@ -108,6 +108,10 @@ function Register() {
                         onChange={handleChange} placeholder="Confirm your password" />
                 </div>
                 <button type="submit">Register</button>
+                <p className="auth-switch">
+                    Already have an account?{" "}
+                    <NavLink to="/login">Login here</NavLink>
+                </p>
             </form>
         </section>
     );

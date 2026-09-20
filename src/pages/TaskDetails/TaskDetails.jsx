@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
 import "./TaskDetails.css";
 
@@ -6,6 +6,7 @@ import "./TaskDetails.css";
 function TaskDetails(){
     const { taskId } = useParams();
     const { tasks } = useTasks();
+    const navigate = useNavigate();
 
     const task = tasks.find(
         (task) => task.id === Number(taskId)
@@ -14,9 +15,14 @@ function TaskDetails(){
     if(!task) {
         return (
             <section className="task-details">
+                <div className="task-details-card">
                 <h1>Task not found</h1>
+                <button className="back-btn" onClick={() => navigate("/tasks")}>
+                   ← Back to Tasks
+                </button>
+                </div>
             </section>
-        )
+        );
     }
 
     return (
@@ -41,22 +47,25 @@ function TaskDetails(){
                 <p>
                     <b>Status:</b>{" "}
                     {task.status
+                     ? task.status
                           .toLowerCase()
                           .replaceAll("_", " ")
-                          .replace(/\b\w/g, (char) => char.toUpperCase())}
+                          .replace(/\b\w/g, (char) => char.toUpperCase()) : "No status"}
                 </p>
 
                 <p>
                     <b>Priority:</b>{" "}
-                    {task.priority
+                    {task.priority 
+                    ? task.priority
                           .toLowerCase()
-                          .replace(/\b\w/g, (char) => char.toUpperCase())}
+                          .replace(/\b\w/g, (char) => char.toUpperCase()) : "No priority"}
                 </p>
                 <p>
                     <b>Date:</b>{" "}
-                    {new Date(task.date).toLocaleString("bg-BG")}
+                    {task.date ? new Date(task.date).toLocaleString("bg-BG") : "No date"}
                 </p>
             </div>
+            <button className="back-btn" onClick={() => navigate("/tasks")}>← Back to Tasks</button>
            </div>
         </section>
     );

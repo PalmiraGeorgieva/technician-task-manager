@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import "./Login.css";
 
@@ -90,6 +90,10 @@ function Login() {
                 <div>
                     <button type="submit">Login</button>
                 </div>
+                <p className="auth-switch">
+                    Don't have an account?{" "}
+                    <NavLink to="/register">Register here</NavLink>
+                </p>
             </form>
 
         </section>
