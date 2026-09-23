@@ -41,7 +41,7 @@
 
 - Deploymend
 
-[ ] React frontend deployment
+[X] React frontend deployment
 [ ] Backend deployment
-[ ] Live Demo
+[X] Live Demo
 

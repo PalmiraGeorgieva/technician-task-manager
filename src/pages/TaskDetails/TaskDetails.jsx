@@ -3,10 +3,12 @@ import { useTasks } from "../../contexts/TasksContext";
 import "./TaskDetails.css";
 
 
+
 function TaskDetails(){
     const { taskId } = useParams();
     const { tasks } = useTasks();
     const navigate = useNavigate();
+   
 
     const task = tasks.find(
         (task) => task.id === Number(taskId)

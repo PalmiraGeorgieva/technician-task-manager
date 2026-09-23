@@ -1,10 +1,13 @@
 import { useTasks } from "../../contexts/TasksContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import "./TaskCard.css";
 
 function TaskCard({ task, showActions = false }) {
     const { setTasks } = useTasks();
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
+    
 
     const deleteHandler = () => {
         const confirmed = window.confirm(
@@ -41,18 +44,20 @@ function TaskCard({ task, showActions = false }) {
 
     return (
        <article className="task-card">
-        <h3>{task.title}</h3>
-        <p><b>Description:</b>{task.description || "No description"}</p>
+        <h3>{task.title}</h3>      
         <p><b>Technician:</b> <strong>{task.technician?.name || "Not assigned"}</strong></p>
         <p><b>Status:</b> <span className={`task-status status-${task.status.trim().toLowerCase().replace(/[\s_]+/g, "-")}`}>{formatStatus(task.status)}</span></p>
         <p><b>Priority:</b> <span className={`task-priority priority-${task.priority.toLowerCase().replaceAll("_", "-")}`}>{formatStatus(task.priority)}</span></p>
-        <p><b>Address:</b>{task.address || "No address"}</p>
         <p className="task-date"><b>Date:</b> {formatDate(task.date)}</p>
         {showActions && (
             <div className="task-actions">
                 <button onClick={() => navigate(`/tasks/${task.id}`)}>Details</button>
-                <button onClick={() => navigate(`/tasks/${task.id}/edit`)}>Edit</button>
-                <button onClick={deleteHandler}>Delete</button>
+              {isAuthenticated && (
+                <>
+                  <button onClick={() => navigate(`/tasks/${task.id}/edit`)}>Edit</button>
+                  <button onClick={deleteHandler}>Delete</button>
+                </>
+                )}
             </div>
         )}
        </article>

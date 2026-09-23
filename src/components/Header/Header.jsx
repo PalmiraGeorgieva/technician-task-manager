@@ -16,15 +16,15 @@ function Header() {
             </NavLink>
             <nav className='main-nav'>
                 <NavLink to="/">Home</NavLink> |{" "}
+                 <NavLink to="/tasks">Tasks</NavLink> {" "}
                 {isAuthenticated ? (
                     <>
                         <NavLink to="/dashboard">Dashboard</NavLink> {" "}
-                        <NavLink to="/tasks">Tasks</NavLink> {" "}
                         <NavLink to="/tasks/create">Create Task</NavLink> {" "}
                         <button onClick={handleLogout}>Logout</button>
                     </>
                 ) : (
-                    <>
+                    <>  
                         <NavLink to="/login">Login</NavLink> {" "}
                         <NavLink to="/register">Register</NavLink>
                     </>

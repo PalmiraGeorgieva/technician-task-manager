@@ -18,19 +18,19 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
+                <Route path="tasks" element={<Tasks />} />
+                <Route path="tasks/:taskId" element={<TaskDetails />} />
                 <Route element={<ProtectedRoute />}>
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="tasks" element={<Tasks />} />
                     <Route path="tasks/create" element={<CreateTask />} />
-                    <Route path="tasks/:taskId" element={<TaskDetails />} />
                     <Route path='tasks/:taskId/edit' element={<EditTask />} />
                 </Route>
-
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
-                <Route path="*" element={<NotFound />} />
+                
 
             </Route>
+            <Route path="*" element={<NotFound />} />
         </Routes>
   );
 }
