@@ -23,7 +23,7 @@ function Register() {
 
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         const username = formData.username.trim();
         const email = formData.email.trim();
@@ -64,11 +64,43 @@ function Register() {
             return;
         }
 
-        localStorage.setItem("user", JSON.stringify({
-            username,
-            email,
-            password: formData.password,
-        }));
+       try {
+         const response  = await fetch(
+            "http://localhost:5000/api/auth/register",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: username,
+                    email,
+                    password: formData.password,
+                }),
+            }
+        );
+
+        const data = await response.json();
+
+        if(!response.ok) {
+            if(!response.ok) {
+                throw new Error(data.message || "Registration failed");
+            }
+        }
+
+        setFormData({
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        });
+
+        navigate("/login");
+
+       } catch (error) {
+         console.error(error);
+         alert(error.message);
+       }
 
 
         setFormData({
@@ -80,7 +112,6 @@ function Register() {
 
         navigate("/login")
 
-        console.log("Registration data", formData);
     }
 
     return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Form } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import "./Login.css";
 
@@ -23,57 +23,65 @@ function Login() {
 
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
-        if(!formData.email) {
+        const email = formData.email.trim();
+
+        if(!email) {
             alert("Please enter your email!");
             return;
         }
 
-        if (!formData.email.includes("@")) {
-            alert("Please enter a valid email!");
-            return;
-        }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if(!formData.password) {
-            alert('Please enter your password!');
-            return;
-        }
-
-        const savedUser = JSON.parse(localStorage.getItem("user"));
-
-        if (!savedUser) {
-            alert("User not found. Please register first.");
-            return;
-        }
-        if(
-            formData.email !== savedUser.email || 
-            formData.password !== savedUser.password
-        ) {
-            alert("Invalid email or password.")
-            return;
-        }
-        if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        if(!emailPattern.test(email)){
             alert("Please enter a valid email address!");
             return;
         }
 
-        if (formData.password.length < 6) {
+        if(formData.password.length < 6) {
             alert("Password must be at least 6 characters long!");
             return;
         }
 
-        login();
+        try {
+            const response = await fetch(
+                "http://localhost:5000/api/auth/login",
+                {
+                   method: "POST",
+                   headers: {
+                    "Content-Type": "application/json"
+                   },
+                   credentials: "include",
+                   body: JSON.stringify({
+                    email,
+                    password: formData.password
+                   }),
+                }
+                
+            );
 
-        setFormData({
-            email: "",
-            password: "",
-        });
+             const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Login failed");
+            }
+            login(data);
+
+            setFormData({
+                email: "",
+                password: ""
+            });
+
+            navigate("/");
+
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
        
-
-        navigate("/dashboard");
-    }
+    };
 
     return (
         <section className="login">

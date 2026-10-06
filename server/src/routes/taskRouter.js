@@ -1,4 +1,4 @@
-import Router from 'express';
+import { Router } from 'express';
 import { getAllTasks, createTask } from '../controllers/taskController.js';
 
 

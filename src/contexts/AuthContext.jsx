@@ -1,25 +1,63 @@
-import { createContext, useContext, useState} from "react";
+import { createContext, useContext, useState, useEffect} from "react";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        return localStorage.getItem("isAuthenticated") === "true";
-    });
+   const [user, setUser] = useState(null);
+   const [authLoading, setAuthLoading] = useState(true);
 
-    const login = () => {
-        localStorage.setItem("isAuthenticated", "true");
-        setIsAuthenticated(true);
+   useEffect(() => {
+        const checkSession = async () => {
+            try {
+                const response = await fetch(
+                    "http://localhost:5000/api/auth/me",
+                    {
+                        credentials: "include",
+                    }
+
+                );
+                if(!response.ok) {
+                    setUser(null);
+                    return;
+                } 
+
+                const data = await response.json();
+                setUser(data);
+            }catch (error) {
+                console.error("Error checking session:", error);
+                setUser(null);
+            }finally {
+                setAuthLoading(false);
+            }
+        };
+
+        checkSession();
+   }, []);
+
+    const login = (userData) => {
+        setUser(userData);
     }
 
-    const logout = () => {
-        localStorage.removeItem("isAuthenticated");
-        setIsAuthenticated(false);
+    const logout = async() => {
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+        }catch (error) {
+            console.error("Logout failed", error);
+        } finally {
+            setUser(null);
+        }
     };
+
+    const isAuthenticated = Boolean(user);
 
     return (
         <AuthContext.Provider value={{
+            user,
             isAuthenticated,
+            authLoading,
             login,
             logout,
            }}
