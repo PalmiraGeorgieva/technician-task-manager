@@ -118,4 +118,40 @@ export const updateTask = async (req, res) => {
         });
     }
 };
-    
+
+export const deleteTask = async(req, res) => {
+    try {
+        const taskId = Number(req.params.taskId);
+
+        const existingTask = await prisma.task.findUnique({
+            where: { id: taskId },
+        });
+
+        if (!existingTask) {
+            return res.status(404).json({
+                message: "Task not found",
+            });
+        }
+
+        if(existingTask.ownerId !== req.user.id) {
+            return res.status(403).json({
+                message: "You are not allowed to delete this task",
+            });
+        }
+
+        await prisma.task.delete({
+            where: { id: taskId },
+        })
+
+        res.json({
+            message: "task deleted successfully",
+        });
+
+    } catch(error){
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to delete task",
+        })
+    }
+}

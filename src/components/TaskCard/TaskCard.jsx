@@ -77,7 +77,7 @@ function TaskCard({ task, showActions = false }) {
         }
     };
 
-    const deleteHandler = () => {
+    const deleteHandler = async() => {
         const confirmed = window.confirm(
             `Are you sure you want to delete "${task.title}"`
         );
@@ -86,10 +86,32 @@ function TaskCard({ task, showActions = false }) {
             return;
         }
 
-        setTasks((currentTasks) =>
-            currentTasks.filter((currentTask) => currentTask.id !== task.id)
-        );
+        try {
+            const response = await fetch(
+                `http://localhost:5000/api/tasks/${task.id}`,
+                {
+                    method: "DELETE",
+                    credentials: "include",
+                }
+            );
 
+            const data = await response.json();
+
+            if(!response.ok) {
+                throw new Error(data.message || "Failed to delete task");
+                
+            }
+
+            setTasks((currentTask) => 
+                currentTask.filter(
+                    (currentTask) => currentTask.id !== task.id
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
+            alert()
+        }
     };
 
     const formatStatus = (status) => {
