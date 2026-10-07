@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
+import { API_URL } from "../config/api";
 
 const TasksContext = createContext();
 
@@ -14,7 +15,7 @@ export function TasksProvider({ children }) {
         try {
             setLoading(true);
             setError(null);
-            const response = await fetch("http://localhost:5000/api/tasks");
+            const response = await fetch(`${API_URL}/api/tasks`);
 
             if(!response.ok) {
                 throw new Error("Failed to load tasks");
@@ -31,7 +32,7 @@ export function TasksProvider({ children }) {
 
       const loadTechnicians = async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/users/technicians");
+           const response = await fetch(`${API_URL}/api/users/technicians`);
 
             if(!response.ok) {
                 throw new Error("Failed to load technicians");

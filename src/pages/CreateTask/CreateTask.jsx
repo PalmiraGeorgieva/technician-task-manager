@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {useTasks} from "../../contexts/TasksContext";
 import "./CreateTask.css";
+import { API_URL } from "../../config/api";
 
 
 function CreateTask() {
@@ -11,7 +12,7 @@ function CreateTask() {
     useEffect(() => {
         const loadTechnicians = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/users/technicians");
+                const response = await fetch(`${API_URL}/api/users/technicians`);
                 if (!response.ok) {
                     throw new Error("Failed to load technicians");
                 }
@@ -55,7 +56,7 @@ function CreateTask() {
         }
 
        try {
-            const response = await fetch("http://localhost:5000/api/tasks", {
+            const response = await fetch(`${API_URL}/api/tasks`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

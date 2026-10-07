@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect} from "react";
-
+import { API_URL } from "../config/api";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
         const checkSession = async () => {
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/auth/me",
+                    `${API_URL}/api/auth/me`,
                     {
                         credentials: "include",
                     }
@@ -40,7 +40,7 @@ export function AuthProvider({ children }) {
 
     const logout = async() => {
         try {
-            const response = await fetch("http://localhost:5000/api/auth/logout", {
+            const response = await fetch(`${API_URL}/api/auth/logout`, {
                 method: "POST",
                 credentials: "include",
             });

@@ -2,6 +2,7 @@ import { useTasks } from "../../contexts/TasksContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import "./TaskCard.css";
+import { API_URL } from "../../config/api";
 
 function TaskCard({ task, showActions = false }) {
     const { setTasks, technicians = [] } = useTasks();
@@ -16,7 +17,7 @@ function TaskCard({ task, showActions = false }) {
             : null;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/tasks/${task.id}`, {
+            const response = await fetch(`${API_URL}/api/tasks/${task.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -49,7 +50,7 @@ function TaskCard({ task, showActions = false }) {
         const status = e.target.value;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/tasks/${task.id}`, {
+            const response = await fetch(`${API_URL}/api/tasks/${task.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -88,7 +89,7 @@ function TaskCard({ task, showActions = false }) {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/tasks/${task.id}`,
+                `${API_URL}/api/tasks/${task.id}`,
                 {
                     method: "DELETE",
                     credentials: "include",

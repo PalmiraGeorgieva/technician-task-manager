@@ -2,6 +2,7 @@ import "./EditTask.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
+import { API_URL } from "../../config/api";
 
 const formatDateForInput = (date) => {
     if (!date) {
@@ -86,7 +87,7 @@ function EditTask(){
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/tasks/${task.id}`,
+                `${API_URL}/api/tasks/${task.id}`,
                 {
                     method: "PUT",
                     headers: {
