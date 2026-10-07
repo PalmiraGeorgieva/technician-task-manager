@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {useTasks} from "../../contexts/TasksContext";
 import "./CreateTask.css";
@@ -6,10 +6,29 @@ import "./CreateTask.css";
 
 function CreateTask() {
     const navigate = useNavigate();
+    const [technicians, setTechnicians] = useState([]);
+
+    useEffect(() => {
+        const loadTechnicians = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/users/technicians");
+                if (!response.ok) {
+                    throw new Error("Failed to load technicians");
+                }
+                const data = await response.json();
+                setTechnicians(data);
+            } catch (error) {
+                console.error("Error loading technicians:", error);
+            }
+        };
+
+        loadTechnicians();
+    }, []);
+
     const [formData, setFormData] = useState({
         title: "",
         description: "",
-        technician: "",
+        technicianId: "",
         status: "PENDING",
         priority: "LOW",
         date: "",
@@ -27,7 +46,7 @@ function CreateTask() {
 
     const { setTasks } = useTasks();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
         if (!formData.title || !formData.description || !formData.date) {
@@ -35,35 +54,42 @@ function CreateTask() {
             return;
         }
 
-        const newTask = {
-            id: Date.now(),
-            title: formData.title,
-            description: formData.description,
-            technician: formData.technician
-                ? { name: formData.technician }
-                : null,
-            status: formData.status,
-            priority: formData.priority,
-            date: formData.date,
-            address: formData.address,
-        };
+       try {
+            const response = await fetch("http://localhost:5000/api/tasks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    title: formData.title,
+                    description: formData.description,
+                    technicianId: formData.technicianId 
+                               ? Number(formData.technicianId)
+                               : null,
+                    status: formData.status,
+                    priority: formData.priority,
+                    date: formData.date,
+                    address: formData.address,
+                }),
+            });
+            const data = await response.json();
 
-        setTasks((currentTasks) => [
-            ...currentTasks,
-            newTask
-        ]);
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to create task");
+            }
 
-        setFormData({
-            title: "",
-            description: "",
-            technician: "",
-            status: "PENDING",
-            priority: "LOW",
-            date: "",
-            address: "",
-        });
+            setTasks((currentTasks) => [...currentTasks, data]);
 
-        navigate("/dashboard");
+
+            navigate(`/tasks/${data.id}`);
+
+       } catch(error) {
+            console.error("Error creating task:", error);
+            alert(error.message);
+
+       }
+        
     };
     return (
         <section className="create-task">
@@ -86,10 +112,14 @@ function CreateTask() {
 
             <div>
                 <label htmlFor="technician">Technician</label>
-                <input type="text" id="technician" name="technician" 
-                  value={formData.technician}
-                  onChange={handleChange}
-                />
+                <select id="technicianId" name="technicianId" value={formData.technicianId} onChange={handleChange}>
+                    <option value="">Select a technician</option>
+                    {technicians.map((technician) => (
+                        <option key={technician.id} value={technician.id}>
+                            {technician.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div>
                 <label htmlFor="address">Address</label>

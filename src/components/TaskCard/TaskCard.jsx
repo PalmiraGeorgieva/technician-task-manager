@@ -4,10 +4,78 @@ import { useAuth } from "../../contexts/AuthContext";
 import "./TaskCard.css";
 
 function TaskCard({ task, showActions = false }) {
-    const { setTasks } = useTasks();
+    const { setTasks, technicians = [] } = useTasks();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     
+
+
+    const technicianChangeHandler = async (e) => {
+        const technicianId = e.target.value
+            ? Number(e.target.value)
+            : null;
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/tasks/${task.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    technicianId,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to update task");
+            }
+
+            setTasks((currentTasks) =>
+                currentTasks.map((currentTask) =>
+                    currentTask.id === task.id ? data : currentTask
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    };
+
+    const statusChangeHandler = async (e) => {
+        const status = e.target.value;
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/tasks/${task.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    status,
+                }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to update task");
+            }
+
+            setTasks((currentTasks) =>
+                currentTasks.map((currentTask) =>
+                    currentTask.id === task.id ? data : currentTask
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    };
 
     const deleteHandler = () => {
         const confirmed = window.confirm(
@@ -18,8 +86,8 @@ function TaskCard({ task, showActions = false }) {
             return;
         }
 
-        setTasks((currentTasks) => 
-            currentTasks.filter((currentTask) => currentTask.id !== task.id) 
+        setTasks((currentTasks) =>
+            currentTasks.filter((currentTask) => currentTask.id !== task.id)
         );
 
     };
@@ -42,27 +110,103 @@ function TaskCard({ task, showActions = false }) {
         }).format(new Date(date));
     };
 
-    return (
-       <article className="task-card">
-        <h3>{task.title}</h3>      
-        <p><b>Technician:</b> <strong>{task.technician?.name || "Not assigned"}</strong></p>
-        <p><b>Status:</b> <span className={`task-status status-${task.status.trim().toLowerCase().replace(/[\s_]+/g, "-")}`}>{formatStatus(task.status)}</span></p>
-        <p><b>Priority:</b> <span className={`task-priority priority-${task.priority.toLowerCase().replaceAll("_", "-")}`}>{formatStatus(task.priority)}</span></p>
-        <p className="task-date"><b>Date:</b> {formatDate(task.date)}</p>
+   return (
+    <article className="task-card">
+        <h3>{task.title}</h3>
+
+        <p>
+            <b>Technician:</b>{" "}
+            {isAuthenticated ? (
+                <select
+                    value={task.technicianId || ""}
+                    onChange={technicianChangeHandler}
+                    className="technician-select"
+                >
+                    <option value="">Select Technician</option>
+
+                    {technicians.map((tech) => (
+                        <option key={tech.id} value={tech.id}>
+                            {tech.name}
+                        </option>
+                    ))}
+                </select>
+            ) : (
+                <strong>
+                    {task.technician?.name || "Not assigned"}
+                </strong>
+            )}
+        </p>
+
+        <p>
+            <b>Status:</b>{" "}
+            {isAuthenticated ? (
+                <select
+                    value={task.status}
+                    onChange={statusChangeHandler}
+                    className={`status-select status-${task.status
+                        .toLowerCase()
+                        .replaceAll("_", "-")}`}
+                >
+                    <option value="PENDING">Pending</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                </select>
+            ) : (
+                <span
+                    className={`task-status status-${task.status
+                        .toLowerCase()
+                        .replaceAll("_", "-")}`}
+                >
+                    {formatStatus(task.status)}
+                </span>
+            )}
+        </p>
+
+        <p>
+            <b>Priority:</b>{" "}
+            <span
+                className={`task-priority priority-${task.priority
+                    .toLowerCase()
+                    .replaceAll("_", "-")}`}
+            >
+                {formatStatus(task.priority)}
+            </span>
+        </p>
+
+        <p className="task-date">
+            <b>Date:</b> {formatDate(task.date)}
+        </p>
+
         {showActions && (
             <div className="task-actions">
-                <button onClick={() => navigate(`/tasks/${task.id}`)}>Details</button>
-              {isAuthenticated && (
-                <>
-                  <button onClick={() => navigate(`/tasks/${task.id}/edit`)}>Edit</button>
-                  <button onClick={deleteHandler}>Delete</button>
-                </>
+                <button
+                    onClick={() =>
+                        navigate(`/tasks/${task.id}`)
+                    }
+                >
+                    Details
+                </button>
+
+                {isAuthenticated && (
+                    <>
+                        <button
+                            onClick={() =>
+                                navigate(`/tasks/${task.id}/edit`)
+                            }
+                        >
+                            Edit
+                        </button>
+
+                        <button onClick={deleteHandler}>
+                            Delete
+                        </button>
+                    </>
                 )}
             </div>
         )}
-       </article>
+    </article>
     );
+
 }
- 
 
 export default TaskCard;
