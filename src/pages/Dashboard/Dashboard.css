@@ -1,5 +1,7 @@
 .dashboard {
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 30px 40px;
 }
 
@@ -16,15 +18,15 @@
     margin-bottom: 20px;
 }
 
-.recent-tasks-list {
+.recent-task-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
-.recent-tasks-list .task-card {
+.recent-task-list .task-card {
     margin-bottom: 0;
-    min-width: 0;
+     padding: 12px;
 }
 
 .stats-container {
@@ -56,7 +58,7 @@
     }
 
     .dashboard h1 {
-        font-size: 1.8px;
+        font-size: 1.8rem;
         margin-bottom: 20px;
     }
 
