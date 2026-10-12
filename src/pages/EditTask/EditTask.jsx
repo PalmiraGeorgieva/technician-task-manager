@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
 import { API_URL } from "../../config/api";
+import { useAuth } from "../../contexts/AuthContext";
+
+
 
 const formatDateForInput = (date) => {
     if (!date) {
@@ -24,11 +27,14 @@ function EditTask(){
    const { taskId } = useParams();
    const navigate = useNavigate();
    const { tasks, setTasks, technicians = [], loading } = useTasks();
+   const { user, authLoading } = useAuth();
 
    const task = tasks.find(
       (task) => task.id === Number(taskId)
    );
 
+   const isOwner = user != null && task != null && Number(task.ownerId) === Number(user.id);
+   
     const [formData, setFormData] = useState(() => ({
         title: "",
         description: "",
@@ -129,7 +135,7 @@ function EditTask(){
         }
     };
 
-   if (loading) {
+   if (loading || authLoading) {
        return (
            <section className="edit-task">
                <h1>Loading task...</h1>

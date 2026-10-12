@@ -1,47 +1,80 @@
-# Application Name: 
- Technicians Task Manager (TTM)
+# Application Name:
+Technicians Task Manager (TTM)
 
-# Application Category / Topic: 
-  Task Manager
+# Application Category / Topic:
+Task Manager
 
 # Main Purpose:
-   Technicians Task Manager is a Single Page Application designed
-  for organizing, assigning and tracking work tasks.
-   The application provides a simple way to manage daily tasks without
-  risk to be forgotten.
+Technicians Task Manager is a Single Page Application (SPA) designed to organize, assign, and track technicians' work tasks.
 
-# Current status - what is done and what is in progress:
+The application helps users manage daily tasks, monitor their progress, assign technicians, and reduce the risk of tasks being overlooked.
 
-- React frontend: 
-[X] Routing
-[X] Header, Footer, Layout
-[X] Design of application
-[X] Authentication Guest / User permission 
-[X] Login
-[X] Register
-[X] Task List
-[X] Hooks ('useState', 'useContext', 'useNavigate', 'useParams')
-[X] Create Task
-[X] Task Card
-[X] Context ('AuthContext', 'TasksContext')
-[ ] Task details - in progress
-[ ] Edit Task - in progress
-[ ] Delete Task - in progress
-[ ] API integration - in progress
-[ ] Loading and error states - in progress
+# Current Status – Completed Features and Work in Progress
 
-- Server backend:
+## React Frontend
 
-[ ] CRUD - in progress
-[ ] Express REST API - in progress
-[ ] Authentication APi - in progress
-[ ] PostgreSQL database - in progress
-[ ] Prisma integration - in progress
-[ ] Error handling - in progress
+- [x] React Router and application routing
+- [x] Header, Footer, and Layout
+- [x] Application design and styling
+- [x] Guest and authenticated user permissions
+- [x] Login and Registration
+- [x] Logout and persistent authentication
+- [x] Task List
+- [x] Task Details
+- [x] Create Task
+- [x] Edit Task
+- [x] Delete Task functionality
+- [x] TaskCard and StatCard components
+- [x] Dashboard with task statistics
+- [x] React Hooks (useState, useEffect, useContext, useNavigate, useParams)
+- [x] Context API (AuthContext, TasksContext)
+- [x] REST API integration
+- [x] Technician assignment and task status updates
+- [x] Owner-based visibility for Edit/Delete actions
+- [x] Protected routes
+- [x] Owner protection in TaskCard
+- [~] Owner protection in EditTask
+- [~] Delete authorization testing
 
-- Deploymend
+- [ ] Task comments
+- [ ] Search and filters
+- [ ] Final documentation
 
-[X] React frontend deployment
-[ ] Backend deployment
-[X] Live Demo
+## Server Backend
 
+- [x] Node.js and Express REST API
+- [x] CRUD operations for tasks
+- [x] Authentication API (Register, Login, Logout, Current User)
+- [x] JWT authentication with HttpOnly cookies
+- [x] PostgreSQL database
+- [x] Prisma ORM integration
+- [x] Supabase PostgreSQL connection
+- [x] Owner authorization for task updates
+- [x] Backend integration with the React frontend
+- [ ] Final verification of Delete authorization
+- [ ] Comments model and API endpoints
+- [ ] Final API error-handling review
+
+## Deployment
+
+- [x] React frontend deployment – Vercel
+- [x] Express backend deployment – Render
+- [x] PostgreSQL database hosting – Supabase
+- [x] Live Demo
+- [x] GitHub repository
+- [x] Production frontend/backend communication
+- [ ] Final production testing
+
+## Documentation and Final Preparation
+
+- [ ] Update README.md
+- [ ] Complete the Functional Guide
+- [ ] Test all application routes and user permissions
+- [ ] Verify all CRUD operations in production
+- [ ] Final GitHub commit and submission preparation
+
+# Project Links
+
+**Live Demo:** https://technician-task-manager.vercel.app
+
+**GitHub Repository:** https://github.com/PalmiraGeorgieva/technician-task-manager

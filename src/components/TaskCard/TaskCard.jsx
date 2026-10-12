@@ -7,7 +7,9 @@ import { API_URL } from "../../config/api";
 function TaskCard({ task, showActions = false }) {
     const { setTasks, technicians = [] } = useTasks();
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    const isOwner = isAuthenticated && user != null && Number(task.ownerId) === Number(user.id);
+
     
 
 
@@ -111,7 +113,7 @@ function TaskCard({ task, showActions = false }) {
 
         } catch (error) {
             console.error(error);
-            alert()
+            alert(error.message)
         }
     };
 
@@ -139,7 +141,7 @@ function TaskCard({ task, showActions = false }) {
 
         <p>
             <b>Technician:</b>{" "}
-            {isAuthenticated ? (
+            {isOwner ? (
                 <select
                     value={task.technicianId || ""}
                     onChange={technicianChangeHandler}
@@ -162,7 +164,7 @@ function TaskCard({ task, showActions = false }) {
 
         <p>
             <b>Status:</b>{" "}
-            {isAuthenticated ? (
+            {isOwner ? (
                 <select
                     value={task.status}
                     onChange={statusChangeHandler}
@@ -210,7 +212,7 @@ function TaskCard({ task, showActions = false }) {
                     Details
                 </button>
 
-                {isAuthenticated && (
+                {isOwner && (
                     <>
                         <button
                             onClick={() =>
