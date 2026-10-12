@@ -34,6 +34,32 @@ function EditTask(){
    );
 
    const isOwner = user != null && task != null && Number(task.ownerId) === Number(user.id);
+
+   if (!task) {
+    return (
+        <section className="edit-task">
+            <h1>Task not found</h1>
+        </section>
+    );
+   }
+   if (!isOwner) {
+    return (
+        <section className="edit-task">
+            <div className="edit-task-card">
+                <h1>Access Denied</h1>
+                <p>You are not authorized to edit this task.</p>
+
+                <button
+                    type="button"
+                    onClick={() => navigate(`/tasks/${task.id}`)}
+                    className="back-btn"
+                >
+                    Back to Task Details
+                </button>
+            </div>
+        </section>
+    );
+   }
    
     const [formData, setFormData] = useState(() => ({
         title: "",
@@ -75,6 +101,10 @@ function EditTask(){
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+
+        if (!isOwner) {
+            return;
+        }
 
         if(!formData.title.trim()) {
             alert("Please enter a title!");
