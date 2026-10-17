@@ -51,7 +51,7 @@ The application helps users manage daily tasks, monitor their progress, assign t
 - [x] Supabase PostgreSQL connection
 - [x] Owner authorization for task updates
 - [x] Backend integration with the React frontend
-- [ ] Final verification of Delete authorization
+- [X] Final verification of Delete authorization
 - [ ] Comments model and API endpoints
 - [ ] Final API error-handling review
 

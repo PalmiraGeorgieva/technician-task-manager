@@ -5,6 +5,11 @@ export const getAllTasks = async (req, res) => {
         const tasks = await prisma.task.findMany({
             include: {
                 technician: true,
+                _count: {
+                    select: {
+                        comments: true,
+                    },
+                },
             }
         });
 

@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useTasks } from "../../contexts/TasksContext";
+import TaskComments from "../../components/TaskComments/TaskComments";
 import "./TaskDetails.css";
 
 
@@ -67,6 +68,7 @@ function TaskDetails(){
                     {task.date ? new Date(task.date).toLocaleString("bg-BG") : "No date"}
                 </p>
             </div>
+            <TaskComments taskId={taskId} />
             <button className="back-btn" onClick={() => navigate("/tasks")}>← Back to Tasks</button>
            </div>
         </section>

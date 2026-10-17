@@ -58,3 +58,13 @@
     background-color: #fef3c7;
     color: #92400e;
 }
+
+.task-comments-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4b5563;
+    margin-top: 12px;
+}

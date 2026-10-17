@@ -38,7 +38,7 @@ function TaskCard({ task, showActions = false }) {
 
             setTasks((currentTasks) =>
                 currentTasks.map((currentTask) =>
-                    currentTask.id === task.id ? data : currentTask
+                    currentTask.id === task.id ? {...currentTask, ...data} : currentTask
                 )
             );
 
@@ -70,7 +70,7 @@ function TaskCard({ task, showActions = false }) {
 
             setTasks((currentTasks) =>
                 currentTasks.map((currentTask) =>
-                    currentTask.id === task.id ? data : currentTask
+                    currentTask.id === task.id ? {...currentTask, ...data} : currentTask
                 )
             );
 
@@ -200,6 +200,11 @@ function TaskCard({ task, showActions = false }) {
 
         <p className="task-date">
             <b>Date:</b> {formatDate(task.date)}
+        </p>
+        <p className="task-comments-count">
+            <span aria-hidden="true">💬</span>{" "}
+            {task._count?.comments ?? 0}{" "}
+            {(task._count?.comments ?? 0) === 1 ? "comment" : "comments"}
         </p>
 
         {showActions && (
