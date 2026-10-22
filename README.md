@@ -6,9 +6,14 @@
 
 **Application Category / Topic:** Task Management System
 
+**Live Demo:** https://technician-task-manager.vercel.app/
+
 **Main Purpose:**
 
-Technicians Task Manager is a Single Page Application (SPA) designed to organize, assign, and track technicians' work tasks.
+Technicians Task Manager is my React project for SoftUni ReactJS
+Regular Exam 2026.
+
+Technicians Task Manager is a Single Page Application (SPA) created to organize, assign, and track technicians' work tasks.
 
 The application allows users to create and manage tasks, assign technicians, monitor task progress, and organize daily technical operations. It also supports task comments, enabling registered users to communicate about existing tasks.
 
@@ -30,8 +35,7 @@ The Start button on the Home page redirects guests to Login and authenticated us
 
 ### Authenticated User
 
-Authenticated users can access:
-
+Authenticated users can access
 - Home
 - Tasks
 - Task Details
