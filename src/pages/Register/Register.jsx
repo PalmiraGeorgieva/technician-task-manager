@@ -65,6 +65,11 @@ function Register() {
             return;
         }
 
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+        }
+
        try {
          const response  = await fetch(
             `${API_URL}/api/auth/register`,
@@ -83,10 +88,8 @@ function Register() {
 
         const data = await response.json();
 
-        if(!response.ok) {
-            if(!response.ok) {
-                throw new Error(data.message || "Registration failed");
-            }
+        if (!response.ok) {
+           throw new Error(data.message || "Registration failed");
         }
 
         setFormData({
@@ -103,15 +106,6 @@ function Register() {
          alert(error.message);
        }
 
-
-        setFormData({
-            username: "",
-            email: "",
-            password: "",
-            confirmPassword: ""
-        });
-
-        navigate("/login")
 
     }
 

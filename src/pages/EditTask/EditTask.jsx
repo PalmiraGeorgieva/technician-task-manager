@@ -35,32 +35,6 @@ function EditTask(){
 
    const isOwner = user != null && task != null && Number(task.ownerId) === Number(user.id);
 
-   if (!task) {
-    return (
-        <section className="edit-task">
-            <h1>Task not found</h1>
-        </section>
-    );
-   }
-   if (!isOwner) {
-    return (
-        <section className="edit-task">
-            <div className="edit-task-card">
-                <h1>Access Denied</h1>
-                <p>You are not authorized to edit this task.</p>
-
-                <button
-                    type="button"
-                    onClick={() => navigate(`/tasks/${task.id}`)}
-                    className="back-btn"
-                >
-                    Back to Task Details
-                </button>
-            </div>
-        </section>
-    );
-   }
-   
     const [formData, setFormData] = useState(() => ({
         title: "",
         description: "",
@@ -110,7 +84,7 @@ function EditTask(){
             alert("Please enter a title!");
             return
         }
-        
+
         if(!formData.description.trim()) {
             alert("Please enter a description!");
             return;
@@ -140,12 +114,12 @@ function EditTask(){
                         address: formData.address.trim(),
                         status: formData.status,
                         priority: formData.priority,
-                        date: formData.date,    
+                        date: formData.date,
                     }),
                 }
             );
 
-            const data = await response.json(); 
+            const data = await response.json();
 
             if(!response.ok) {
                 throw new Error(
@@ -153,8 +127,12 @@ function EditTask(){
                 );
             }
 
-            setTasks((currentTasks) => 
-                currentTasks.map((currentTask) => currentTask.id === task.id ? data : currentTask)
+            setTasks((currentTasks) =>
+                currentTasks.map((currentTask) =>
+                    currentTask.id === task.id
+                        ? { ...currentTask, ...data }
+                        : currentTask
+                )
             );
 
             navigate(`/tasks/${task.id}`);
@@ -181,6 +159,25 @@ function EditTask(){
        );
    }
 
+    if (!isOwner) {
+        return (
+            <section className="edit-task">
+                <div className="edit-task-card">
+                    <h1>Access Denied</h1>
+                    <p>You are not authorized to edit this task.</p>
+
+                    <button
+                        type="button"
+                        onClick={() => navigate(`/tasks/${task.id}`)}
+                        className="back-btn"
+                    >
+                        Back to Task Details
+                    </button>
+                </div>
+            </section>
+        );
+    }
+
    return (
     <section className="edit-task">
         <div className="edit-task-card">
@@ -194,13 +191,13 @@ function EditTask(){
                        onChange={handleChange}
                    />
 
-                   <label htmlFor="description">Decription</label>
+                   <label htmlFor="description">Description</label>
                    <textarea name="description" id="description"
                        value={formData.description}
                        onChange={handleChange}
                    />
 
-                   <label htmlFor="technician">Technician</label>
+                   <label htmlFor="technicianId">Technician</label>
                    <select
                        id="technicianId"
                        name="technicianId"

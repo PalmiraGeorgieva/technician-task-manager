@@ -3,8 +3,15 @@ import TaskCard from "../../components/TaskCard/TaskCard";
 import "./Tasks.css";
 
 function Tasks() {
-    const { tasks } = useTasks();
+    const { tasks, loading, error } = useTasks();
 
+    if (loading) {
+        return <p>Loading tasks...</p>;
+    }
+
+    if (error) {
+        return <p>Failed to load tasks: {error}</p>;
+    }
     return (
         <section className="tasks-page">
         <h1>Tasks</h1>

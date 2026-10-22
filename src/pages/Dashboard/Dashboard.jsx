@@ -8,12 +8,24 @@ function Dashboard() {
     const totalTasks = tasks.length;
     const recentTasks = tasks.slice(-3).reverse();
 
+    const pendingTasks = tasks.filter(
+        (task) => task.status === "PENDING"
+    ).length;
+
     const inProgressTasks = tasks.filter(
         (task) => task.status === "IN_PROGRESS"
     ).length;
 
     const completedTasks = tasks.filter(
         (task) => task.status === "COMPLETED"
+    ).length;
+
+    const lowPriorityTasks = tasks.filter(
+        (task) => task.priority === "LOw"
+    ).length;
+
+    const mediumPriorityTasks = tasks.filter(
+        (task) => task.priority === "MEDIUM"
     ).length;
 
     const highPriorityTasks = tasks.filter(
@@ -24,12 +36,17 @@ function Dashboard() {
     return (
         <section className='dashboard'>
             <h1>Dashboard</h1>
+
             <div className='stats-container'>
                 <StatCard title="Total Tasks" value={totalTasks} />
+                <StatCard title="Pending" value={pendingTasks} />
                 <StatCard title="In Progress" value={inProgressTasks} />
                 <StatCard title="Completed" value={completedTasks} />
+                <StatCard title="Low Priority" value={lowPriorityTasks} />
+                <StatCard title="Medium Priority" value={mediumPriorityTasks} />
                 <StatCard title="High Priority" value={highPriorityTasks} />
             </div>
+
             <div className='recent-tasks'>
                 <h2>Recent Tasks</h2>
                 {tasks.length === 0 ? (
@@ -39,7 +56,7 @@ function Dashboard() {
                 ) : (
                     <div className='recent-task-list'>
                         {recentTasks.map((task) => (
-                            <TaskCard 
+                            <TaskCard
                                key={task.id}
                                task={task}
                             />
