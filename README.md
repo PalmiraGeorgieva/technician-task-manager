@@ -26,7 +26,7 @@
 
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/prisma/prisma-original.svg" width="45" title="Prisma" alt="Prisma" />
 
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-line-wordmark.svg" width="45" title="Vercel" alt="Vercel"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-line-wordmark.svg" width="45" title="Vercel" alt="Vercel" color="#70B1EC"/>
 
 </p>
 
