@@ -54,7 +54,7 @@ The Start button on the Home page redirects guests to Login and authenticated us
 
 ### Authenticated User
 
-Authenticated users can access
+Authenticated users can access:
 - Home
 - Tasks
 - Task Details
@@ -198,9 +198,11 @@ The backend verifies task ownership before allowing an update.
 
 **Inline Task Updates**
 
-Authenticated task owners can update the assigned technician and task status directly from task cards on both the Dashboard and Tasks pages using dropdown menus.
+Authenticated task owners can update the assigned technician, task status, and priority directly from task cards on both the Dashboard and Tasks pages.
 
-This allows users to manage tasks without navigating to the Edit Task page.
+The fields use conditional rendering: clicking an editable value displays a dropdown menu. After a successful update, the selected value is saved to the database and the updated value is displayed.
+
+Task status and priority are visually distinguished using dynamic color styling.
 
 Task ownership permissions are enforced by the backend for these updates as well.
 
@@ -279,6 +281,12 @@ The fetched data is stored in React state and made available to other components
 
 The provider also manages loading and error states.
 
+The `TasksProvider` also implements effect cleanup using `AbortController`. When the provider unmounts, any pending requests for tasks and technicians are aborted.
+
+This prevents unnecessary processing of unfinished requests after the component has been removed.
+
+React state updates trigger re-rendering of components that consume the shared context, keeping the interface synchronized with task changes.
+
 **Lifecycle Example — AuthProvider**
 
 When `AuthProvider` mounts, a `useEffect` hook checks whether the user has an active authentication session.
@@ -348,6 +356,44 @@ The Edit Task page displays a loading state while retrieving the selected task. 
 The application also includes a Not Found page for unmatched routes.
 
 ---
+
+## Application Architecture
+
+Technicians Task Manager follows a component-based React architecture with a separate frontend, backend REST API, and PostgreSQL database.
+
+### Frontend Architecture
+
+The frontend is built with React and Vite and uses React Router for client-side navigation.
+
+- **Pages** — represent the application's main views, including Home, Dashboard, Tasks, Task Details, Create Task, Edit Task, Login, and Register.
+- **Components** — reusable UI elements such as Header, Footer, Layout, TaskCard, StatCard, ProtectedRoute, and TaskComments.
+- **Contexts** — `AuthContext` manages authentication state, while `TasksContext` manages task data, technician information, and shared state updates.
+- **Routing** — React Router handles navigation, dynamic URL parameters, and protected routes.
+- **Styling** — external CSS files provide styling for individual components and pages.
+
+### Backend Architecture
+
+The backend is developed with Node.js and Express and exposes REST API endpoints for authentication, task management, technician data, and comments.
+
+Prisma ORM is used to communicate with the PostgreSQL database, which stores users, tasks, technician assignments, and comments.
+
+The backend validates authentication and enforces ownership permissions for task updates and deletions.
+
+### Data Flow
+
+1. A user interacts with a React page or component.
+2. The frontend sends an HTTP request to the Express REST API.
+3. The backend processes the request and communicates with PostgreSQL through Prisma ORM.
+4. The API returns a response to the frontend.
+5. React state and Context API are updated to reflect the latest data.
+
+### Deployment Architecture
+
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Database:** Supabase PostgreSQL
+
+This separation allows the frontend, backend, and database to operate as independent parts of the application.
 
 ## Installation & Local Development
 
