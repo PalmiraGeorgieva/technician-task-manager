@@ -11,11 +11,14 @@ export function TasksProvider({ children }) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+       const controller = new AbortController();
       const loadTasks = async () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await fetch(`${API_URL}/api/tasks`);
+            const response = await fetch(`${API_URL}/api/tasks`, {
+                signal: controller.signal,
+            });
 
             if(!response.ok) {
                 throw new Error("Failed to load tasks");
@@ -23,16 +26,22 @@ export function TasksProvider({ children }) {
             const data = await response.json();
             setTasks(data);
         } catch (error) {
+            if (error.name === "AbortError") return;
             console.error(error);
             setError(error.message);
         } finally {
-            setLoading(false);
+            if (!controller.signal.aborted){
+                setLoading(false);
+            }
+
         }
       };
 
       const loadTechnicians = async () => {
         try {
-           const response = await fetch(`${API_URL}/api/users/technicians`);
+           const response = await fetch(`${API_URL}/api/users/technicians`, {
+            signal: controller.signal,
+           });
 
             if(!response.ok) {
                 throw new Error("Failed to load technicians");
@@ -41,6 +50,7 @@ export function TasksProvider({ children }) {
             console.log("Technicians loaded:", data);
             setTechnicians(data);
         } catch (error) {
+            if (error.name === "AbortError") return;
             console.error(error);
             setError(error.message);
         }
@@ -48,6 +58,9 @@ export function TasksProvider({ children }) {
 
       loadTasks();
       loadTechnicians();
+      return () => {
+        controller.abort();
+      }
    }, []);
 
     return (

@@ -1,4 +1,5 @@
 import { useTasks } from "../../contexts/TasksContext";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import "./TaskCard.css";
@@ -9,14 +10,11 @@ function TaskCard({ task, showActions = false }) {
     const navigate = useNavigate();
     const { isAuthenticated, user } = useAuth();
     const isOwner = isAuthenticated && user != null && Number(task.ownerId) === Number(user.id);
+    const [editingField, setEditingField] = useState(null);
+    const [updatingField, setUpdatingField] = useState(null);
 
-    
-
-
-    const technicianChangeHandler = async (e) => {
-        const technicianId = e.target.value
-            ? Number(e.target.value)
-            : null;
+    const updateTaskField = async (field, value) => {
+        setUpdatingField(field);
 
         try {
             const response = await fetch(`${API_URL}/api/tasks/${task.id}`, {
@@ -26,7 +24,7 @@ function TaskCard({ task, showActions = false }) {
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    technicianId,
+                    [field]: value,
                 }),
             });
 
@@ -38,45 +36,18 @@ function TaskCard({ task, showActions = false }) {
 
             setTasks((currentTasks) =>
                 currentTasks.map((currentTask) =>
-                    currentTask.id === task.id ? {...currentTask, ...data} : currentTask
+                    currentTask.id === task.id
+                        ? { ...currentTask, ...data }
+                        : currentTask
                 )
             );
 
+            setEditingField(null);
         } catch (error) {
             console.error(error);
             alert(error.message);
-        }
-    };
-
-    const statusChangeHandler = async (e) => {
-        const status = e.target.value;
-
-        try {
-            const response = await fetch(`${API_URL}/api/tasks/${task.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    status,
-                }),
-            });
-
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || "Failed to update task");
-            }
-
-            setTasks((currentTasks) =>
-                currentTasks.map((currentTask) =>
-                    currentTask.id === task.id ? {...currentTask, ...data} : currentTask
-                )
-            );
-
-        } catch (error) {
-            console.error(error);
-            alert(error.message);
+        } finally {
+            setUpdatingField(null);
         }
     };
 
@@ -102,10 +73,10 @@ function TaskCard({ task, showActions = false }) {
 
             if(!response.ok) {
                 throw new Error(data.message || "Failed to delete task");
-                
+
             }
 
-            setTasks((currentTask) => 
+            setTasks((currentTask) =>
                 currentTask.filter(
                     (currentTask) => currentTask.id !== task.id
                 )
@@ -141,10 +112,18 @@ function TaskCard({ task, showActions = false }) {
 
         <p>
             <b>Technician:</b>{" "}
-            {isOwner ? (
+            {isOwner && editingField === "technicianId" ? (
                 <select
-                    value={task.technicianId || ""}
-                    onChange={technicianChangeHandler}
+                    autoFocus
+                    value={task.technicianId ?? ""}
+                    disabled={updatingField !== null}
+                    onChange={(e) => updateTaskField(
+                        "technicianId",
+                        e.target.value ? Number(e.target.value) : null
+                    )}
+                    onBlur={() => {
+                        if (!updatingField) setEditingField(null)
+                    }}
                     className="technician-select"
                 >
                     <option value="">Select Technician</option>
@@ -155,19 +134,32 @@ function TaskCard({ task, showActions = false }) {
                         </option>
                     ))}
                 </select>
-            ) : (
+            ) : isOwner ? (
                 <strong>
-                    {task.technician?.name || "Not assigned"}
+                    <button type="button"
+                           className="inline-edit-button"
+                           onClick={() => setEditingField("technicianId")}
+                           disabled={updatingField !== null}
+                    >
+                        {task.technician?.name || "Not assigned"}
+                        <span aria-hidden="true"> ▾</span>
+                    </button>
                 </strong>
+            ) : (
+                <strong>{task.technician?.name || "Not assigned"}</strong>
             )}
         </p>
 
         <p>
             <b>Status:</b>{" "}
-            {isOwner ? (
+            {isOwner && editingField === "status" ? (
                 <select
+                    autoFocus
                     value={task.status}
-                    onChange={statusChangeHandler}
+                    disabled={updatingField !== null}
+                    onChange={(e) =>
+                        updateTaskField("status", e.target.value)
+                    }
                     className={`status-select status-${task.status
                         .toLowerCase()
                         .replaceAll("_", "-")}`}
@@ -176,12 +168,17 @@ function TaskCard({ task, showActions = false }) {
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
                 </select>
-            ) : (
-                <span
-                    className={`task-status status-${task.status
-                        .toLowerCase()
-                        .replaceAll("_", "-")}`}
+            ) : isOwner ? (
+                <button
+                   type="button"
+                   className={`inline-edit-button task-status status-${task.status.toLowerCase().replaceAll("_", "-")}`}
+                   onClick={() => setEditingField("status")}
+                   disabled={updatingField !== null}
                 >
+                    {formatStatus(task.status)} ▾
+                </button>
+            ) : (
+                <span className={`task-status status-${task.status.toLowerCase().replaceAll("_", "-")}`}>
                     {formatStatus(task.status)}
                 </span>
             )}
@@ -189,13 +186,35 @@ function TaskCard({ task, showActions = false }) {
 
         <p>
             <b>Priority:</b>{" "}
-            <span
-                className={`task-priority priority-${task.priority
-                    .toLowerCase()
-                    .replaceAll("_", "-")}`}
-            >
-                {formatStatus(task.priority)}
-            </span>
+            {isOwner && editingField === "priority" ? (
+                <select autoFocus
+                     value={task.priority}
+                     disabled={updatingField !== null}
+                     onChange={(e) =>
+                        updateTaskField("priority", e.target.value)
+                     }
+                     onBlur={() => {
+                        if (!updatingField) setEditingField(null)
+                     }}
+                    className="priority-select"
+                >
+                    <option value="LOW">Low</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HIGH">High</option>
+                </select>
+            ) : isOwner ? (
+                <button type="button"
+                    className={`inline-edit-button task-priority priority-${task.priority.toLowerCase()}`}
+                    onClick={() => setEditingField("priority")}
+                    disabled={updatingField !== null}
+                >
+                    {formatStatus(task.priority)} ▾
+                </button>
+            ) : (
+                <span className={`task-priority priority-${task.priority.toLowerCase()}`}>
+                    {formatStatus(task.priority)}
+                </span>
+            )}
         </p>
 
         <p className="task-date">
